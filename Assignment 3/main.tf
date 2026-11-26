@@ -187,7 +187,7 @@ resource "azurerm_nat_gateway" "NATtoInternet" {
   resource_group_name = "network-resources"
 }
 
-resource "azurerm_subnet_nat_gateway_association" "example" {
+resource "azurerm_subnet_nat_gateway_association" "NATtoExternalSubnet" {
   subnet_id      = azurerm_subnet.ExternalNet.id
   nat_gateway_id = azurerm_nat_gateway.NATtoInternet.id
 }
