@@ -17,12 +17,14 @@ provider "azurerm" {
 
 
 
-#Virtual Network setup
+# Azure Network Resources
 resource "azurerm_resource_group" "Vnet-Resources" {
   name     = "network-resources"
   location = "eastus"
 }
 
+
+# Network Security Groups (NSGs) and paired rules. 
 resource "azurerm_network_security_group" "InternalNSG" {
   name     = "InternalNSG"
   location = "eastus"
@@ -148,6 +150,7 @@ resource "azurerm_network_security_group" "ExternalNSG" {
 
 }
 
+# Virtual Network and Subnets
 resource "azurerm_virtual_network" "UAACSMainNet" {
   name     = "UAACSMainNet"
   location = "eastus"
@@ -172,6 +175,7 @@ resource "azurerm_subnet" "ExternalNet"{
   default_outbound_access_enabled = false
 }
 
+# Connects NSGs to Subnets
 resource "azurerm_subnet_network_security_group_association" "InternalNSGtoSubnet" {
   subnet_id                 = azurerm_subnet.InternalNet.id
   network_security_group_id = azurerm_network_security_group.InternalNSG.id
@@ -181,6 +185,7 @@ resource "azurerm_subnet_network_security_group_association" "ExternalNSGtoSubne
   network_security_group_id = azurerm_network_security_group.ExternalNSG.id
 }
 
+# Connects NAT Gateway to External Subnet
 resource "azurerm_nat_gateway" "NATtoInternet" {
   name     = "NATtoInternet"
   location = "eastus"
@@ -192,6 +197,7 @@ resource "azurerm_subnet_nat_gateway_association" "NATtoExternalSubnet" {
   nat_gateway_id = azurerm_nat_gateway.NATtoInternet.id
 }
 
+# Network Interfaces
 resource "azurerm_network_interface" "WInt1" {
   name                = "WInternalInt1"
   location            = "eastus"
@@ -401,12 +407,6 @@ resource "azurerm_windows_virtual_machine" "NPS" {
 
 
 #Linux VMs
-
-resource "azurerm_resource_group" "Keys" {
-  name     = "LinuxSSHkeys"
-  location = "eastus"
-}
-
 resource "azurerm_linux_virtual_machine" "LinuxInternal1" {
   name                = "LinuxInternal1"
   resource_group_name = "InternalVMs"
