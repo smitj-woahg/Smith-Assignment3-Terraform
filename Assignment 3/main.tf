@@ -401,6 +401,12 @@ resource "azurerm_windows_virtual_machine" "NPS" {
 
 
 #Linux VMs
+
+resource "azurerm_resource_group" "Keys" {
+  name     = "LinuxSSHkeys"
+  location = "eastus"
+}
+
 resource "azurerm_linux_virtual_machine" "LinuxInternal1" {
   name                = "LinuxInternal1"
   resource_group_name = "InternalVMs"
@@ -411,6 +417,12 @@ resource "azurerm_linux_virtual_machine" "LinuxInternal1" {
   network_interface_ids = [
     azurerm_network_interface.LInt1.id
   ]
+  zone = "1"
+
+  # admin_ssh_key {
+  #   username   = "adminuser"
+  #   public_key = "P@ssw0rd"
+  # }
 
   os_disk {
     caching              = "ReadWrite"
@@ -434,6 +446,12 @@ resource "azurerm_linux_virtual_machine" "LinuxInternal2" {
   network_interface_ids = [
     azurerm_network_interface.LInt2.id
   ]
+  zone = "1"
+
+  # admin_ssh_key {
+  #   username   = "adminuser"
+  #   public_key = "P@ssw0rd"
+  # }
 
   os_disk {
     caching              = "ReadWrite"
@@ -458,6 +476,12 @@ resource "azurerm_linux_virtual_machine" "LinuxExternal1" {
   network_interface_ids = [
     azurerm_network_interface.LInt3.id
   ]
+  zone = "1"
+
+  # admin_ssh_key {
+  #   username   = "adminuser"
+  #   public_key = "P@ssw0rd"
+  # }
 
   os_disk {
     caching              = "ReadWrite"
@@ -481,7 +505,13 @@ resource "azurerm_linux_virtual_machine" "LinuxExternal2" {
   network_interface_ids = [
     azurerm_network_interface.LInt4.id
   ]
+  zone = "1"
 
+    # admin_ssh_key {
+  #   username   = "adminuser"
+  #   public_key = "P@ssw0rd"
+  # }
+  
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
@@ -494,12 +524,3 @@ resource "azurerm_linux_virtual_machine" "LinuxExternal2" {
     version   = "latest"
   }
 }
-
-
-
-#Line structure References
-# lines 1-15: https://developer.hashicorp.com/terraform/tutorials/azure-get-started/azure-build
-# lines 20-55: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network
-# lines 58-80: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/network_interface
-# lines 92-190: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/windows_virtual_machine
-# lines 192-300: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_virtual_machine
